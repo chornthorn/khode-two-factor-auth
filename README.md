@@ -1,8 +1,6 @@
-# Keycloak 2FA Rest API Extension
+# Keycloak 2FA REST API Extension
 
-khode-2fa is a Keycloak extension that provides a REST API for managing Time-based One-Time Password (TOTP)
-authentication. This extension allows you to set up, verify, enable, disable, and validate TOTP for users in a Keycloak
-realm.
+khode-2fa is a Keycloak extension that provides a REST API for managing Time-based One-Time Password (TOTP) authentication. This extension allows you to set up, verify, enable, disable, and validate TOTP for users in a Keycloak realm.
 
 ## Features
 
@@ -13,12 +11,11 @@ realm.
 - Validate TOTP code
 - Disable TOTP for a user
 - Flexible authentication support:
-   - Client credentials (service account) authentication
-   - User token authentication
-   - Per-endpoint authorization controls
+  - Client credentials (service account) authentication
+  - User token authentication
+  - Per-endpoint authorization controls
 
-This extension is designed to integrate seamlessly with existing Keycloak deployments, offering developers and
-administrators greater flexibility in implementing and managing 2FA.
+This extension is designed to integrate seamlessly with existing Keycloak deployments, offering developers and administrators greater flexibility in implementing and managing 2FA.
 
 ## Installation
 
@@ -27,34 +24,76 @@ You can either build the JAR file from source or download a pre-built version fr
 ### Option 1: Download from Releases
 
 1. Go to the [Releases](https://github.com/chornthorn/khode-two-factor-auth/releases) page
-2. Download the latest `khode-two-factor-auth-x.x.x.jar` file (e.g. `khode-two-factor-auth-1.1.0.jar`)
-3. Copy the JAR file to your Keycloak deployments directory:
+2. Download the latest `khode-two-factor-auth-x.x.x.jar` file (e.g. `khode-two-factor-auth-1.4.0.jar`)
+3. Copy the JAR file to your Keycloak deployments directory and set proper permissions:
 
-   ```
-   cp khode-two-factor-auth-1.1.0.jar /path/to/keycloak/providers/
+   ```bash
+   # Copy the file
+   cp khode-two-factor-auth-1.4.0.jar /path/to/keycloak/providers/
+   
+   # Set proper ownership (assuming keycloak is the user/group)
+   sudo chown keycloak:keycloak /path/to/keycloak/providers/khode-two-factor-auth-*.jar
+   
+   # Set proper permissions
+   sudo chmod 644 /path/to/keycloak/providers/khode-two-factor-auth-*.jar
    ```
 
 ### Option 2: Build from Source
 
 1. Clone the repository:
-   ```
+   ```bash
    git clone https://github.com/chornthorn/khode-two-factor-auth.git
    ```
 
 2. Change to the project directory:
-   ```
+   ```bash
    cd khode-two-factor-auth
    ```
 
 3. Build the project using Maven:
-   ```
+   ```bash
    mvn clean package
    ```
 
-4. Copy the resulting JAR file to the Keycloak deployments directory:
+4. Copy the resulting JAR file to the Keycloak deployments directory and set proper permissions:
+   ```bash
+   # Copy the file
+   cp target/khode-two-factor-auth-*.jar /path/to/keycloak/providers/
+   
+   # Set proper ownership (assuming keycloak is the user/group)
+   sudo chown keycloak:keycloak /path/to/keycloak/providers/khode-two-factor-auth-*.jar
+   
+   # Set proper permissions (readable by owner and group)
+   sudo chmod 644 /path/to/keycloak/providers/khode-two-factor-auth-*.jar
    ```
-   cp target/khode-two-factor-auth-[version-number].jar /path/to/keycloak/providers/
+
+### Option 3: Using Docker
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/chornthorn/khode-two-factor-auth.git
    ```
+
+2. Build the Docker image:
+    ```bash
+    cd khode-two-factor-auth
+    docker build -t khode-keycloak:latest .
+    ```
+
+    #### For MacOS with Apple Silicon (M1/M2) or other ARM-based systems, specify the platform:
+    ```bash
+    cd khode-two-factor-auth
+    docker build --platform linux/amd64 -t khode-keycloak:latest .
+    ```
+
+3. Run the container:
+   ```bash
+   docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin khode-keycloak:latest start-dev
+   ```
+
+4. Access Keycloak at http://localhost:8080
+
+The Docker image is based on the official Keycloak image and includes the 2FA extension pre-installed.
 
 After installing using either method, restart Keycloak to load the new extension.
 
